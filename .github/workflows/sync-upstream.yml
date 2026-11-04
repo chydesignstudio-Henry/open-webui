@@ -1,0 +1,47 @@
+# 每日把這個 fork 的預設分支與上游預設分支合併。
+#
+# 03:00 Asia/Taipei（UTC+8，臺灣無日光節約時間）= 19:00 UTC。
+# GitHub 排程使用 UTC，實際啟動可能延遲數分鐘到數十分鐘。
+#
+# 腳本只呼叫 merge-upstream API（與 `gh repo sync` 不加 --force 時相同的端點）。
+# 能快轉就快轉；fork 自己有提交時做 merge commit，既有檔案與新增檔案都留著。
+# 不 force-push，也不呼叫 git refs API 覆寫分支。
+# 合併衝突或其他失敗會讓這個 job 失敗，並開（或更新）一則 issue。
+#
+# GITHUB_TOKEN 需要 contents: write。上游若改到 .github/workflows，
+# GITHUB_TOKEN 無法寫入那些檔案。可另外設定 secret UPSTREAM_SYNC_TOKEN
+# （classic PAT：repo + workflow；或 fine-grained PAT：Contents 與 Workflows 讀寫）。
+# 沒有這個 secret 時，仍使用 GITHUB_TOKEN。
+
+name: Sync upstream
+
+on:
+  schedule:
+    - cron: "0 19 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Merge upstream into default branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out workflow script
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Merge upstream default branch
+        env:
+          SYNC_TOKEN: ${{ secrets.UPSTREAM_SYNC_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash .github/scripts/sync-upstream.sh
