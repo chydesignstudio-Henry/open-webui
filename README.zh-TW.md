@@ -3,6 +3,8 @@
 > **這是翻譯。** 本文把上游儲存庫 [open-webui/open-webui](https://github.com/open-webui/open-webui) 的英文說明 [README.md](https://github.com/open-webui/open-webui/blob/main/README.md) 譯成繁體中文（臺灣，zh-TW），說明這個專案是什麼、功能放在哪裡看，以及如何安裝與使用。程式碼區塊、指令與連結維持原文。若譯文與原文不一致，以上游 [README.md](https://github.com/open-webui/open-webui/blob/main/README.md) 為準。
 >
 > 本檔是這個 fork 另外新增的，沒有改上游檔案。上游專案自己的繁體中文版是 [README.zht.md](https://github.com/open-webui/open-webui/blob/main/README.zht.md)。
+>
+> 這個 fork 自己的筆記在 [NOTES.md](NOTES.md)，繁體中文說明是本檔 [README.zh-TW.md](README.zh-TW.md)。
 
 <h2>Open WebUI</h2>
 
